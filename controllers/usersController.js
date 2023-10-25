@@ -1,71 +1,131 @@
-const { Course, Student } = require('../models');
+const { User, Thoughts,  } = require('../models');
 
 module.exports = {
   // Get all courses
-  async getCourses(req, res) {
+  async getUsers(req, res) {
     try {
-      const courses = await Course.find();
-      res.json(courses);
+      const users = await User.find();
+      res.json(users);
     } catch (err) {
       res.status(500).json(err);
     }
   },
   // Get a course
-  async getSingleCourse(req, res) {
+  async getUsersById(req, res) {
     try {
-      const course = await Course.findOne({ _id: req.params.courseId })
+      const users = await User.findOne({ _id: req.params.user_Id })
         .select('-__v');
 
-      if (!course) {
-        return res.status(404).json({ message: 'No course with that ID' });
+      if (!users) {
+        return res.status(404).json({ message: 'No User with that ID' });
       }
 
-      res.json(course);
+      res.json(users);
     } catch (err) {
       res.status(500).json(err);
     }
   },
-  // Create a course
-  async createCourse(req, res) {
+  async createAUser(req, res) {
     try {
-      const course = await Course.create(req.body);
-      res.json(course);
+      const dbUserData = await User.create(req.body);
+      res.json(dbUserData);
     } catch (err) {
-      console.log(err);
-      return res.status(500).json(err);
+      res.status(500).json(err);
     }
   },
-  // Delete a course
-  async deleteCourse(req, res) {
-    try {
-      const course = await Course.findOneAndDelete({ _id: req.params.courseId });
 
-      if (!course) {
-        return res.status(404).json({ message: 'No course with that ID' });
+ // Update a course
+ async updateAUser(req, res) {
+  try {
+    const users = await User.findOneAndUpdate(
+      { _id: req.params.user_Id },
+      { $set: req.body },
+      { runValidators: true, new: true }
+    );
+
+    if (!users) {
+      return res.status(404).json({ message: 'No User with this id!' });
+    }
+
+    res.json(users);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+},
+
+  // Delete a course
+  async deleteAUser(req, res) {
+    try {
+      const users = await User.findOneAndDelete({ _id: req.params.userId });
+
+      if (!users) {
+        return res.status(404).json({ message: 'No User with that ID' });
       }
 
-      await Student.deleteMany({ _id: { $in: course.students } });
-      res.json({ message: 'Course and students deleted!' });
+      await Thoughts.deleteMany({ _id: { $in: User.Thoughts } });
+      res.json({ message: 'User and Thoughts deleted!' });
     } catch (err) {
       res.status(500).json(err);
     }
   },
   // Update a course
-  async updateCourse(req, res) {
+  async updateAUser(req, res) {
     try {
-      const course = await Course.findOneAndUpdate(
-        { _id: req.params.courseId },
+      const users = await User.findOneAndUpdate(
+        { _id: req.params.user_Id },
         { $set: req.body },
         { runValidators: true, new: true }
       );
 
-      if (!course) {
-        return res.status(404).json({ message: 'No course with this id!' });
+      if (!users) {
+        return res.status(404).json({ message: 'No User with this id!' });
       }
 
-      res.json(course);
+      res.json(users);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
+
+  async addAFriend(req, res) {
+    try {
+      console.log('You are adding an Friend');
+      console.log(req.body);
+      const users = await User.findOneAndUpdate(
+        { _id: req.params.user_Id },
+        { $addToSet: { Friends: req.body } },
+        { runValidators: true, new: true }
+      );
+
+      if (!users) {
+        return res
+          .status(404)
+          .json({ message: 'No User found with that ID :(' })
+      }
+
+      res.json(users);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
+  async removeAFriend(req, res) {
+    try {
+      const users = await User.findOneAndUpdate(
+        { _id: req.params.user_Id },
+        { $pull: { Friends: { friendsId: req.params.friendsId } } },
+        { runValidators: true, new: true }
+      );
+
+      if (!users) {
+        return res
+          .status(404)
+          .json({ message: 'No student found with that ID :(' });
+      }
+
+      res.json(users);
     } catch (err) {
       res.status(500).json(err);
     }
   },
 };
+
