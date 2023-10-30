@@ -24,5 +24,12 @@ module.exports = {
     .catch(err => res.status(404).json({ message: 'No User with that ID' }));
   },
 
+  createAUser({body}, res) {
+    console.log('createAUser')
+    User.create(body)
+    .then(data => res.json(data))
+    .catch(err => res.status(404).json({ message: 'No User with that ID' }));
+  },
+
 };
 
