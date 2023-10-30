@@ -9,21 +9,22 @@ const {
   removeAReaction,
 } = require('../../controllers/thoughtsController.js');
 
-// /api/courses
-router.route('/').get(getThoughts).post(createAThought);
+// /api/thoughts
+router.route('/').get(getThoughts);
+// .post(createAThought);
 
 // /api/courses/:courseId
-router
-  .route('/:thoughtsId')
-  .get(getThoughtsById)
-  .put(updateAThought)
-  .delete(deleteAThought);
+// router
+//   .route('/:id')
+//   .get(getThoughtsById)
+//   .put(updateAThought)
+//   .delete(deleteAThought);
 
-  // /api/students/:studentId/assignments
-router.route('/:thoughtsId/Reaction').post(addAReaction);
+//   // /api/students/:studentId/assignments
+// router.route('/:thoughtsId/Reaction').post(addAReaction);
 
-// /api/students/:studentId/assignments/:assignmentId
-router.route('/:thoughtsId/Reactions/:reactionId').delete(removeAReaction);
+// // /api/students/:studentId/assignments/:assignmentId
+// router.route('/:thoughtsId/Reactions/:reactionId').delete(removeAReaction);
 
 
 module.exports = router;
