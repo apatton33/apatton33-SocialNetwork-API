@@ -13,7 +13,7 @@ and run GET, Post, Put, and DELETE tests for the information that is formatted i
 There is tests for both Users and Thoughts as seen in the walkthrough video.
 
 ## Walkthrough Video
-
+https://drive.google.com/file/d/1soul3Usxrh0xBJcuAIAT3dMAQItEhUPD/view
 
 
 Adrian Patton: https://github.com/apatton33
